@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -13,4 +17,10 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+@font-face {
+  font-family: staatliches;
+  font-weight: 400;
+  src: url("/fonts/Staatliches.ttf");
 }
