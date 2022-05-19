@@ -1,29 +1,53 @@
+import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import express from "express";
+import resolvers from "./resolvers/index.js";
+import schema from "./schema/index.js";
 import http from "http";
-import resolvers from "../src/resolver/index.js";
-import schema from "../src/schema/index.js";
-import { readDB } from "./dbController.js";
+import { randomDB, readDB, reverseDB } from "./dbController.js";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-async function startApolloServer(typeDefs, resolvers) {
-  const app = express();
-  const httpServer = http.createServer(app);
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: {
-      db: {
-        books: readDB("books"),
-      },
+const app = express();
+dotenv.config();
+const httpServer = http.createServer(app);
+const server = new ApolloServer({
+  typeDefs: schema,
+  resolvers,
+  context: {
+    db: {
+      cody: reverseDB("cody"),
+      products: randomDB("products"),
+      perfumes: randomDB("perfumes"),
+      music: randomDB("music"),
     },
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  });
+  },
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+});
+await server.start();
 
-  await server.start();
-  server.applyMiddleware({ app });
-  await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+server.applyMiddleware({
+  app,
+  path: "/graphql",
+  cors: {
+    origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+    credentials: true,
+  },
+});
+
+await new Promise((resolve) => httpServer.listen({ port: 8000 }, resolve));
+
+console.log(`🚀 Server ready at http://localhost:8000${server.graphqlPath}`);
+
+try {
+  await mongoose
+    .connect(process.env.MONGODB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => {
+      console.log("connected to MongoDB");
+    });
+} catch (err) {
+  console.log("err", err);
 }
-
-startApolloServer(schema, resolvers);

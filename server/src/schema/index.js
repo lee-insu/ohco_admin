@@ -1,14 +1,22 @@
 import { gql } from "apollo-server-express";
+import codySchema from "./cody.js";
+import productsShema from "./product.js";
+import perfumesShema from "./perfumes.js";
+import musicShema from "./music.js";
 
-const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-
+const linkSchema = gql`
   type Query {
-    books: [Book]
+    _: Boolean
+  }
+  type Mutation {
+    _: Boolean
   }
 `;
 
-export default typeDefs;
+export default [
+  linkSchema,
+  codySchema,
+  productsShema,
+  perfumesShema,
+  musicShema,
+];
