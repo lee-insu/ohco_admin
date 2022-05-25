@@ -4,8 +4,8 @@ import Link from "next/link";
 
 const navigation = [
   { name: "메인페이지", href: "/", current: true },
-  { name: "코디", href: "cody", current: false },
-  { name: "음악", href: "music", current: false },
+  { name: "코디", href: "/cody", current: false },
+  { name: "음악", href: "/music", current: false },
 ];
 
 const classNames = (...classes: any) => {

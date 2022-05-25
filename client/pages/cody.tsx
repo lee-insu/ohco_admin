@@ -1,6 +1,83 @@
+import { useMutation } from "@apollo/client";
 import { NextPage } from "next";
+import { ChangeEvent, useState } from "react";
+import { INSERT_CODY } from "../graphql/cody";
+import { Newcody } from "../type";
 
 const cody: NextPage = () => {
+  const [username, setUsername] = useState<String>();
+  const [userId, setUserId] = useState<String>();
+  const [img, setImg] = useState<String>();
+  const [instagram, setInstagram] = useState<String>();
+  const [shopurl, setShopurl] = useState<String>();
+  const [youtube, setYoutube] = useState<String>();
+  const [sex, setSex] = useState<String>();
+  const [mood, setMood] = useState<String>();
+  const [style, setStyle] = useState<String>();
+  const [season, setSeason] = useState<String>();
+  const [theme, setTheme] = useState<String>();
+
+  const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const {
+      currentTarget: { value, name },
+    } = e;
+
+    name == "name"
+      ? setUsername(value)
+      : name == "username"
+      ? setUserId(value)
+      : name == "imgurl"
+      ? setImg(value)
+      : name == "instagram"
+      ? setInstagram(value)
+      : name == "shop"
+      ? setShopurl(value)
+      : name == "youtube"
+      ? setYoutube(value)
+      : null;
+  };
+
+  const handleChange = (
+    e: ChangeEvent<{ value: String; name: String }>
+  ): void => {
+    const {
+      target: { value, name },
+    } = e;
+
+    name == "sex"
+      ? setSex(value)
+      : name == "mood"
+      ? setMood(value)
+      : name == "season"
+      ? setMood(value)
+      : name == "style"
+      ? setStyle(value)
+      : name == "season"
+      ? setSeason(value)
+      : name == "theme"
+      ? setTheme(value)
+      : null;
+  };
+
+  // const [insertCody, { error, data }] = useMutation<{ newcody: Newcody }>(
+  //   INSERT_CODY,
+  //   {
+  //     variables: {
+  //       name: username,
+  //       user_id: userId,
+  //       img_url: img,
+  //       youtube,
+  //       instagram,
+  //       shop: shopurl,
+  //       mood,
+  //       season,
+  //       sex,
+  //       style,
+  //       theme,
+  //     },
+  //   }
+  // );
+
   return (
     <div className="max-w-7xl mt-10 mx-auto px-2 sm:px-6 lg:px-8">
       <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -12,6 +89,7 @@ const cody: NextPage = () => {
             <p className="mt-1 text-md text-gray-600">코디를 추가합시다</p>
           </div>
         </div>
+
         <div className=" mt-5 md:mt-0 md:col-span-4">
           <form action="#" method="POST">
             <div className="shadow overflow-hidden sm:rounded-md">
@@ -31,6 +109,7 @@ const cody: NextPage = () => {
                       autoComplete="name"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                       required
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -48,6 +127,7 @@ const cody: NextPage = () => {
                       autoComplete="username"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                       required
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -65,6 +145,7 @@ const cody: NextPage = () => {
                       autoComplete="imgurl"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                       required
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -80,9 +161,11 @@ const cody: NextPage = () => {
                       name="sex"
                       autoComplete="sex"
                       className="sm:w-2/5 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
                     >
-                      <option>남</option>
-                      <option>여</option>
+                      <option value="null">선택</option>
+                      <option value="남">남</option>
+                      <option value="여">여</option>
                     </select>
                   </div>
 
@@ -99,6 +182,7 @@ const cody: NextPage = () => {
                       id="instagram"
                       autoComplete="instagram"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -115,6 +199,7 @@ const cody: NextPage = () => {
                       id="shop"
                       autoComplete="shop"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -131,6 +216,7 @@ const cody: NextPage = () => {
                       id="youtube"
                       autoComplete="youtube"
                       className="sm:w-2/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      onChange={(e) => onChange(e)}
                     />
                   </div>
 
@@ -146,9 +232,15 @@ const cody: NextPage = () => {
                       name="mood"
                       autoComplete="mood"
                       className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
                     >
-                      <option>화이트와 차분한 무드</option>
-                      <option>화이트와 포근한 무드</option>
+                      <option value="null">선택</option>
+                      <option value="화이트와 차분한 무드">
+                        화이트와 차분한 무드
+                      </option>
+                      <option value="화이트와 포근한 무드">
+                        화이트와 포근한 무드
+                      </option>
                     </select>
                   </div>
 
@@ -164,11 +256,13 @@ const cody: NextPage = () => {
                       name="season"
                       autoComplete="season"
                       className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
                     >
-                      <option>봄</option>
-                      <option>여름</option>
-                      <option>가을</option>
-                      <option>겨울</option>
+                      <option value="null">선택</option>
+                      <option value="봄">봄</option>
+                      <option value="여름">여름</option>
+                      <option value="가을">가을</option>
+                      <option value="겨울">겨울</option>
                     </select>
                   </div>
 
@@ -184,11 +278,13 @@ const cody: NextPage = () => {
                       name="style"
                       autoComplete="style"
                       className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
                     >
-                      <option>모던캐주얼</option>
-                      <option>캐주얼</option>
-                      <option>포멀</option>
-                      <option>스트릿</option>
+                      <option value="null">선택</option>
+                      <option value="모던캐주얼">모던캐주얼</option>
+                      <option value="캐주얼">캐주얼</option>
+                      <option value="포멀">포멀</option>
+                      <option value="스트릿">스트릿</option>
                     </select>
                   </div>
 
@@ -200,15 +296,17 @@ const cody: NextPage = () => {
                       테마
                     </label>
                     <select
-                      id="style"
-                      name="style"
-                      autoComplete="style"
+                      id="theme"
+                      name="theme"
+                      autoComplete="theme"
                       className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
                     >
-                      <option>y2k</option>
-                      <option>캠퍼스룩</option>
-                      <option>꾸안꾸</option>
-                      <option>서촌</option>
+                      <option value="null">선택</option>
+                      <option value="y2k">y2k</option>
+                      <option value="캠퍼스룩">캠퍼스룩</option>
+                      <option value="꾸안꾸">꾸안꾸</option>
+                      <option value="서촌">서촌</option>
                     </select>
                   </div>
                 </div>
