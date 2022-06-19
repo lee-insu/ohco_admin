@@ -3,6 +3,21 @@ import { NextPage } from "next";
 import { ChangeEvent, useState } from "react";
 import { INSERT_CODY } from "../graphql/cody";
 import { Newcody } from "../type";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type InsertCodyForm = {
+  name: string;
+  user_id: string;
+  img_url: string;
+  youtube: string;
+  instagram: string;
+  shop: string;
+  mood: string;
+  season: string;
+  sex: string;
+  style: string;
+  theme: string;
+};
 
 const cody: NextPage = () => {
   const [username, setUsername] = useState<String>();
@@ -16,6 +31,10 @@ const cody: NextPage = () => {
   const [style, setStyle] = useState<String>();
   const [season, setSeason] = useState<String>();
   const [theme, setTheme] = useState<String>();
+
+  const { register, handleSubmit } = useForm<InsertCodyForm>();
+
+  const onSubmit: SubmitHandler<InsertCodyForm> = (data) => console.log(data);
 
   const onChange = (e: React.FormEvent<HTMLInputElement>): void => {
     const {
@@ -48,8 +67,6 @@ const cody: NextPage = () => {
       ? setSex(value)
       : name == "mood"
       ? setMood(value)
-      : name == "season"
-      ? setMood(value)
       : name == "style"
       ? setStyle(value)
       : name == "season"
@@ -58,6 +75,12 @@ const cody: NextPage = () => {
       ? setTheme(value)
       : null;
   };
+
+  const [addCody, { error }] = useMutation(INSERT_CODY);
+
+  if (error) {
+    console.log(`submit error ! ${error}`);
+  }
 
   // const [insertCody, { error, data }] = useMutation<{ newcody: Newcody }>(
   //   INSERT_CODY,
@@ -91,7 +114,7 @@ const cody: NextPage = () => {
         </div>
 
         <div className=" mt-5 md:mt-0 md:col-span-4">
-          <form action="#" method="POST">
+          <form>
             <div className="shadow overflow-hidden sm:rounded-md">
               <div className="px-4 py-5 bg-white sm:p-6">
                 <div className="grid grid-cols-6 gap-6  ">
@@ -108,7 +131,6 @@ const cody: NextPage = () => {
                       id="name"
                       autoComplete="name"
                       className="sm:w-3/5 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                      required
                       onChange={(e) => onChange(e)}
                     />
                   </div>
